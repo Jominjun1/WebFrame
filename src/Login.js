@@ -1,6 +1,7 @@
 // Login.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import HomePage from './homePage';
 
 const Login = ({ Loginuser, users }) => {
   const [username, setUsername] = useState('');
@@ -11,7 +12,7 @@ const Login = ({ Loginuser, users }) => {
     const user = users.find((u) => u.id === username && u.password === password);
     if (user) {
       Loginuser(true);
-      navigate('/homePage'); // 로그인 후 /main으로 이동
+      navigate(<HomePage />); // 로그인 후 /main으로 이동
     } else {
       alert('로그인 실패. 아이디와 비밀번호를 확인하세요.');
     }

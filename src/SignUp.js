@@ -1,48 +1,43 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import usersData from './users.json';
 
-const SignUp = ({ onSignUp }) => {
-  const [newUsername, setNewUsername] = useState('');
-  const [newPassword, setNewPassword] = useState('');
-  const [newEmail, setNewEmail] = useState('');
-  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false); // 회원가입 성공 여부 상태
-  const navigate = useNavigate(); // navigate로 변경
+const SignUp = ({ onSignUp, users }) => {
+  const [newUser, setNewUser] = useState({ id: '', password: '', email: '' });
+  const [isSignUpSuccess, setIsSignUpSuccess] = useState(false);
+  const [isUsernameTaken, setIsUsernameTaken] = useState(false);
+  const navigate = useNavigate();
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewUser({ ...newUser, [name]: value });
+    setIsUsernameTaken(false);
+  };
 
   const handleSignUp = () => {
-    // 새로운 사용자 정보를 처리
-    const newUser = {
-      id: newUsername,
-      password: newPassword,
-      email: newEmail,
-    };
-
-    // 회원 가입 처리 함수 호출
-    onSignUp(newUser);
-
-    // 회원 가입 후 입력 필드 초기화
-    setNewUsername('');
-    setNewPassword('');
-    setNewEmail('');
-
-    // 회원가입 성공 메시지를 표시
-    setIsSignUpSuccess(true);
-
-    // 로그인 화면으로 이동
-    navigate('/'); // navigate로 변경
+    const isTaken = users.some((user) => user.id === newUser.id);
+    if (isTaken) {
+      setIsUsernameTaken(true);
+    } else {
+      onSignUp(newUser);
+      usersData.push(newUser);
+      setNewUser({ id: '', password: '', email: '' });
+      setIsSignUpSuccess(true);
+      navigate('/');
+    }
   };
 
   return (
     <div>
       <h2>회원 가입</h2>
-      <input type="text" placeholder="아이디" value={newUsername} onChange={(e) => setNewUsername(e.target.value)} />
+      <input type="text" name="id" placeholder="아이디" value={newUser.id} onChange={handleInputChange}/>
       <br />
-      <input type="password" placeholder="비밀번호" value={newPassword} onChange={(e) => setNewPassword(e.target.value)} />
+      <input type="password" name="password" placeholder="비밀번호" value={newUser.password} onChange={handleInputChange}/>
       <br />
-      <input type="text" placeholder="이메일 주소" value={newEmail} onChange={(e) => setNewEmail(e.target.value)} />
+      <input type="text" name="email" placeholder="이메일 주소" value={newUser.email} onChange={handleInputChange}/>
       <br />
       <button onClick={handleSignUp}>회원 가입 완료</button>
-      <Link to="/login">로그인</Link>
-      
+      {isUsernameTaken && <p>중복된 아이디입니다.</p>}    
       {isSignUpSuccess && <p>회원가입이 완료되었습니다.</p>}
     </div>
   );

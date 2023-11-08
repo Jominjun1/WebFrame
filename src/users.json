@@ -2,11 +2,13 @@
   {
     "id": "1971281",
     "password": "19777",
-    "email": "simpers@naver.com"
+    "email": "simpers@naver.com",
+    "name" : "조민준"
   },
   {
     "id": "1971282",
-    "password": "19776",
-    "email" : "whalswns0@gmail.com"
+    "password": "197777",
+    "email" : "zxcvz@zxcv.cc",
+    "name" : "whalswns"
   }  
 ]
